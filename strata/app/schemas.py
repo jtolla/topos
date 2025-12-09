@@ -5,7 +5,6 @@ from pydantic import BaseModel, Field
 
 from app.models import ExposureLevel, FileEventType, SensitivityLevel, SensitivityType
 
-
 # ============================================================================
 # Admin Schemas
 # ============================================================================
@@ -217,6 +216,7 @@ class AgentResponse(BaseModel):
 
 class AgentSearchChunksRequest(BaseModel):
     """Search request with agent identity for policy enforcement."""
+
     query: str
     scope: QueryScope | None = None
     k: int = Field(default=20, ge=1, le=100)
@@ -226,6 +226,7 @@ class AgentSearchChunksRequest(BaseModel):
 
 class AgentSearchChunksResponse(BaseModel):
     """Search response with interaction trace ID."""
+
     results: list[ChunkSearchResult]
     interaction_id: UUID | None = None  # For observability trace
 

@@ -1,4 +1,3 @@
-import io
 import logging
 import re
 from pathlib import Path
@@ -22,7 +21,7 @@ def extract_text_plain(path: str) -> ExtractedDocument:
 
     for encoding in encodings:
         try:
-            with open(path, "r", encoding=encoding) as f:
+            with open(path, encoding=encoding) as f:
                 text = f.read()
             title = Path(path).stem
             return ExtractedDocument(title=title, text=text)
@@ -223,7 +222,9 @@ TYPE_AWARE_OVERLAP = 300
 # Patterns for detecting section boundaries
 CONTRACT_SECTION_PATTERNS = [
     # Numbered clauses: "1.", "1.1", "1.1.1", "Article 1", "Section 1"
-    re.compile(r"^(?:article|section|clause)?\s*(\d+(?:\.\d+)*\.?)\s+(.+)", re.IGNORECASE | re.MULTILINE),
+    re.compile(
+        r"^(?:article|section|clause)?\s*(\d+(?:\.\d+)*\.?)\s+(.+)", re.IGNORECASE | re.MULTILINE
+    ),
     # Roman numerals: "I.", "II.", "III."
     re.compile(r"^((?:X{0,3})?(?:IX|IV|V?I{0,3})\.)\s+(.+)", re.MULTILINE),
     # Lettered sections: "(a)", "(b)", "(i)", "(ii)"
@@ -267,8 +268,8 @@ class Section:
         self.end_pos = end_pos
         self.content = content
         self.number = number
-        self.children: list["Section"] = []
-        self.parent: "Section | None" = None
+        self.children: list[Section] = []
+        self.parent: Section | None = None
 
     def get_path(self) -> list[str]:
         """Get hierarchical path from root to this section."""
@@ -311,13 +312,15 @@ def detect_sections(text: str, patterns: list[re.Pattern]) -> list[Section]:
                 number = None
                 level = 1
 
-            matches.append({
-                "heading": heading,
-                "number": number,
-                "level": level,
-                "start": match.start(),
-                "end": match.end(),
-            })
+            matches.append(
+                {
+                    "heading": heading,
+                    "number": number,
+                    "level": level,
+                    "start": match.start(),
+                    "end": match.end(),
+                }
+            )
 
     # Sort by position and remove duplicates/overlaps
     matches.sort(key=lambda m: m["start"])
@@ -337,7 +340,7 @@ def detect_sections(text: str, patterns: list[re.Pattern]) -> list[Section]:
             level=m["level"],
             start_pos=m["start"],
             end_pos=next_start,
-            content=text[m["end"]:next_start].strip(),
+            content=text[m["end"] : next_start].strip(),
             number=m["number"],
         )
         sections.append(section)
@@ -480,7 +483,10 @@ def chunk_text_type_aware(
 
             # If we got chunks, return them
             if all_chunks:
-                logger.info(f"Type-aware chunking ({doc_type}): {len(sections)} sections, {len(all_chunks)} chunks")
+                logger.info(
+                    f"Type-aware chunking ({doc_type}): "
+                    f"{len(sections)} sections, {len(all_chunks)} chunks"
+                )
                 return all_chunks
 
     # Fall back to standard chunking

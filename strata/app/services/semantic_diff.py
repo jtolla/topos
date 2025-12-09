@@ -3,7 +3,6 @@
 Computes semantic differences between document versions.
 """
 
-import json
 import logging
 from dataclasses import dataclass, field
 from typing import Any
@@ -67,26 +66,32 @@ def compare_structured_fields(
         new_val = new_fields.get(key)
 
         if old_val is None and new_val is not None:
-            changes.append(FieldChange(
-                field_name=key,
-                old_value=old_val,
-                new_value=new_val,
-                change_type="added",
-            ))
+            changes.append(
+                FieldChange(
+                    field_name=key,
+                    old_value=old_val,
+                    new_value=new_val,
+                    change_type="added",
+                )
+            )
         elif old_val is not None and new_val is None:
-            changes.append(FieldChange(
-                field_name=key,
-                old_value=old_val,
-                new_value=new_val,
-                change_type="removed",
-            ))
+            changes.append(
+                FieldChange(
+                    field_name=key,
+                    old_value=old_val,
+                    new_value=new_val,
+                    change_type="removed",
+                )
+            )
         elif old_val != new_val:
-            changes.append(FieldChange(
-                field_name=key,
-                old_value=old_val,
-                new_value=new_val,
-                change_type="modified",
-            ))
+            changes.append(
+                FieldChange(
+                    field_name=key,
+                    old_value=old_val,
+                    new_value=new_val,
+                    change_type="modified",
+                )
+            )
 
     return changes
 
@@ -113,20 +118,23 @@ async def generate_diff_summary_llm(
             elif change.change_type == "removed":
                 changes_desc.append(f"- Removed {change.field_name} (was: {change.old_value})")
             else:
-                changes_desc.append(f"- Changed {change.field_name}: {change.old_value} → {change.new_value}")
+                changes_desc.append(
+                    f"- Changed {change.field_name}: {change.old_value} → {change.new_value}"
+                )
 
-        changes_text = "\n".join(changes_desc) if changes_desc else "No structured field changes detected."
+        changes_text = (
+            "\n".join(changes_desc) if changes_desc else "No structured field changes detected."
+        )
 
-        prompt = f"""Summarize the changes between two versions of a {new_doc.doc_type.value if new_doc.doc_type else 'document'}.
-
-Document: {new_doc.title}
-Version {old_doc.version_number} → Version {new_doc.version_number}
-
-Key changes detected:
-{changes_text}
-
-Write a concise 2-3 sentence summary of what changed in this document, suitable for a change report.
-Focus on the business impact of the changes."""
+        doc_type_str = new_doc.doc_type.value if new_doc.doc_type else "document"
+        prompt = (
+            f"Summarize the changes between two versions of a {doc_type_str}.\n\n"
+            f"Document: {new_doc.title}\n"
+            f"Version {old_doc.version_number} → Version {new_doc.version_number}\n\n"
+            f"Key changes detected:\n{changes_text}\n\n"
+            "Write a concise 2-3 sentence summary of what changed in this document, "
+            "suitable for a change report. Focus on the business impact of the changes."
+        )
 
         response = await client.chat.completions.create(
             model="gpt-4o-mini",
@@ -163,7 +171,7 @@ def generate_diff_summary_simple(field_changes: list[FieldChange]) -> str:
 
 
 async def compute_semantic_diff(
-    session: AsyncSession,
+    session: AsyncSession,  # noqa: ARG001
     from_version: Document,
     to_version: Document,
 ) -> SemanticDiff:
@@ -221,12 +229,8 @@ async def get_or_compute_diff(
         return SemanticDiff(
             from_version_id=from_version_id,
             to_version_id=to_version_id,
-            field_changes=[
-                FieldChange(**fc) for fc in cached.field_changes
-            ],
-            section_changes=[
-                SectionChange(**sc) for sc in cached.section_changes
-            ],
+            field_changes=[FieldChange(**fc) for fc in cached.field_changes],
+            section_changes=[SectionChange(**sc) for sc in cached.section_changes],
             summary=cached.summary,
         )
 
@@ -239,7 +243,9 @@ async def get_or_compute_diff(
 
     # Verify same document lineage
     if from_doc.file_id != to_doc.file_id:
-        logger.warning(f"Documents {from_version_id} and {to_version_id} are not versions of the same file")
+        logger.warning(
+            f"Documents {from_version_id} and {to_version_id} are not versions of the same file"
+        )
 
     # Compute diff
     diff = await compute_semantic_diff(session, from_doc, to_doc)
@@ -254,7 +260,12 @@ async def get_or_compute_diff(
         from_version_id=from_version_id,
         to_version_id=to_version_id,
         field_changes=[
-            {"field_name": fc.field_name, "old_value": fc.old_value, "new_value": fc.new_value, "change_type": fc.change_type}
+            {
+                "field_name": fc.field_name,
+                "old_value": fc.old_value,
+                "new_value": fc.new_value,
+                "change_type": fc.change_type,
+            }
             for fc in diff.field_changes
         ],
         section_changes=[],

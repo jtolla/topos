@@ -64,9 +64,7 @@ def compute_acl_hash(acl_entries: list[AclEntry]) -> str:
         key=lambda e: (e.principal_external_id, e.rights, e.source),
     )
 
-    content = "|".join(
-        f"{e.principal_external_id}:{e.rights}:{e.source}" for e in sorted_entries
-    )
+    content = "|".join(f"{e.principal_external_id}:{e.rights}:{e.source}" for e in sorted_entries)
     return f"sha256:{hashlib.sha256(content.encode()).hexdigest()}"
 
 
@@ -142,11 +140,7 @@ def scan_share(config: ShareConfig) -> list[FileInfo]:
 
         for root, dirs, filenames in os.walk(scan_root):
             # Filter out excluded directories
-            dirs[:] = [
-                d
-                for d in dirs
-                if not should_exclude(d, config.exclude_patterns)
-            ]
+            dirs[:] = [d for d in dirs if not should_exclude(d, config.exclude_patterns)]
 
             for filename in filenames:
                 if should_exclude(filename, config.exclude_patterns):

@@ -3,7 +3,7 @@ import logging
 from abc import ABC, abstractmethod
 from datetime import datetime
 
-from sqlalchemy import text, update
+from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
@@ -24,7 +24,6 @@ class BaseWorker(ABC):
     @abstractmethod
     async def process_job(self, session: AsyncSession, job: Job) -> None:
         """Process a single job. Implement in subclass."""
-        pass
 
     async def claim_job(self, session: AsyncSession) -> Job | None:
         """
@@ -48,7 +47,8 @@ class BaseWorker(ABC):
                     FOR UPDATE SKIP LOCKED
                     LIMIT 1
                 )
-                RETURNING id, tenant_id, job_type, file_id, document_id, status, attempts, last_error, created_at, updated_at
+                RETURNING id, tenant_id, job_type, file_id, document_id,
+                          status, attempts, last_error, created_at, updated_at
             """),
             {
                 "job_type": self.job_type.value,

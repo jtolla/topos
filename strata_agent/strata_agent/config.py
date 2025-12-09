@@ -1,5 +1,4 @@
 import os
-from pathlib import Path
 
 import yaml
 from pydantic import BaseModel
@@ -36,7 +35,7 @@ class AgentSettings(BaseSettings):
     @classmethod
     def from_yaml(cls, path: str) -> "AgentSettings":
         """Load settings from a YAML config file."""
-        with open(path, "r") as f:
+        with open(path) as f:
             data = yaml.safe_load(f)
 
         # Convert shares to ShareConfig objects
@@ -46,7 +45,8 @@ class AgentSettings(BaseSettings):
             agent_id=data.get("agent_id", cls.model_fields["agent_id"].default),
             tenant_api_key=os.environ.get("STRATA_API_KEY", data.get("tenant_api_key", "")),
             api_base_url=os.environ.get(
-                "STRATA_API_BASE_URL", data.get("api_base_url", cls.model_fields["api_base_url"].default)
+                "STRATA_API_BASE_URL",
+                data.get("api_base_url", cls.model_fields["api_base_url"].default),
             ),
             scan_interval_seconds=data.get(
                 "scan_interval_seconds", cls.model_fields["scan_interval_seconds"].default

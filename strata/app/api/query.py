@@ -2,10 +2,10 @@ import logging
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy import and_, func, select
-from sqlalchemy.orm import selectinload
+from sqlalchemy import func, select
 
-from app.auth import get_tenant_context, TenantContext
+from app.auth import TenantContext, get_tenant_context
+from app.config import settings
 from app.models import (
     Agent,
     Chunk,
@@ -16,7 +16,6 @@ from app.models import (
     SensitivityFinding,
     Share,
 )
-from app.config import settings
 from app.schemas import (
     AccessSummary,
     AgentSearchChunksRequest,
@@ -77,15 +76,11 @@ async def find_sensitive_content(
         if request.scope.share_id:
             query = query.where(File.share_id == request.scope.share_id)
         if request.scope.path_prefix:
-            query = query.where(
-                File.relative_path.startswith(request.scope.path_prefix)
-            )
+            query = query.where(File.relative_path.startswith(request.scope.path_prefix))
 
     # Apply exposure level filter
     if request.exposure_levels:
-        query = query.where(
-            DocumentExposure.exposure_level.in_(request.exposure_levels)
-        )
+        query = query.where(DocumentExposure.exposure_level.in_(request.exposure_levels))
 
     # Apply sensitivity type filter - requires subquery
     if request.sensitivity_types:
@@ -176,9 +171,7 @@ async def search_chunks(
         if request.scope.share_id:
             query = query.where(File.share_id == request.scope.share_id)
         if request.scope.path_prefix:
-            query = query.where(
-                File.relative_path.startswith(request.scope.path_prefix)
-            )
+            query = query.where(File.relative_path.startswith(request.scope.path_prefix))
 
     # Limit results
     query = query.limit(request.k)
@@ -376,9 +369,7 @@ async def search_chunks_v0(
         if request.scope.share_id:
             query = query.where(File.share_id == request.scope.share_id)
         if request.scope.path_prefix:
-            query = query.where(
-                File.relative_path.startswith(request.scope.path_prefix)
-            )
+            query = query.where(File.relative_path.startswith(request.scope.path_prefix))
 
     # Get more results than needed for filtering
     query = query.limit(request.k * 2)
@@ -411,8 +402,6 @@ async def search_chunks_v0(
 
             # Evaluate policy if agent_id provided
             view_type = "raw"
-            was_filtered = False
-            filter_reason = None
 
             if request.agent_id:
                 decision = await evaluate_chunk_access(
@@ -530,9 +519,7 @@ async def list_interactions_endpoint(
     )
 
     # Get total count
-    count_query = select(func.count(Interaction.id)).where(
-        Interaction.tenant_id == ctx.tenant_id
-    )
+    count_query = select(func.count(Interaction.id)).where(Interaction.tenant_id == ctx.tenant_id)
     if agent_id:
         count_query = count_query.where(Interaction.agent_id == agent_id)
     if interaction_type:
@@ -543,13 +530,7 @@ async def list_interactions_endpoint(
 
     items = []
     for i in interactions:
-        # Get chunk count for this interaction
-        chunk_result = await ctx.session.execute(
-            select(func.count()).where(
-                Interaction.id == i.id
-            ).select_from(Interaction)
-        )
-        chunk_count = len(i.chunks) if hasattr(i, 'chunks') else 0
+        chunk_count = len(i.chunks) if hasattr(i, "chunks") else 0
 
         items.append(
             InteractionListItem(
@@ -631,9 +612,7 @@ async def answer_with_evidence(
         if request.scope.share_id:
             query = query.where(File.share_id == request.scope.share_id)
         if request.scope.path_prefix:
-            query = query.where(
-                File.relative_path.startswith(request.scope.path_prefix)
-            )
+            query = query.where(File.relative_path.startswith(request.scope.path_prefix))
 
     # Get more results for filtering
     query = query.limit(request.k * 2)
@@ -718,7 +697,9 @@ async def answer_with_evidence(
 
         if not evidence:
             # No relevant evidence found
-            tracker.set_answer("I could not find relevant information to answer this question.", 0.0)
+            tracker.set_answer(
+                "I could not find relevant information to answer this question.", 0.0
+            )
             return AnswerWithEvidenceResponse(
                 answer="I could not find relevant information to answer this question.",
                 evidence=[],
@@ -734,16 +715,17 @@ async def answer_with_evidence(
 
             context = "\n\n---\n\n".join(context_texts)
 
-            prompt = f"""You are a helpful assistant answering questions based on provided document evidence.
-
-Question: {request.question}
-
-Relevant document excerpts:
-{context}
-
-Based ONLY on the evidence provided above, answer the question. If the evidence doesn't contain enough information to fully answer the question, say so. Be specific and cite which documents support your answer.
-
-Answer:"""
+            prompt = (
+                "You are a helpful assistant answering questions based on "
+                "provided document evidence.\n\n"
+                f"Question: {request.question}\n\n"
+                f"Relevant document excerpts:\n{context}\n\n"
+                "Based ONLY on the evidence provided above, answer the question. "
+                "If the evidence doesn't contain enough information to fully answer "
+                "the question, say so. Be specific and cite which documents support "
+                "your answer.\n\n"
+                "Answer:"
+            )
 
             response = await client.chat.completions.create(
                 model="gpt-4o-mini",
@@ -771,7 +753,7 @@ Answer:"""
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="Failed to generate answer",
-            )
+            ) from e
 
 
 # ============================================================================

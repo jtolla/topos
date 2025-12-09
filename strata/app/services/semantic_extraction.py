@@ -56,12 +56,11 @@ def get_schema_for_doc_type(doc_type: DocType) -> dict[str, str]:
     """Get the extraction schema for a document type."""
     if doc_type == DocType.CONTRACT:
         return CONTRACT_SCHEMA
-    elif doc_type == DocType.POLICY:
+    if doc_type == DocType.POLICY:
         return POLICY_SCHEMA
-    elif doc_type == DocType.RFC:
+    if doc_type == DocType.RFC:
         return RFC_SCHEMA
-    else:
-        return {}
+    return {}
 
 
 async def extract_structured_fields(
@@ -102,21 +101,17 @@ async def extract_structured_fields(
         # Use first 8000 chars for extraction (balance between coverage and token limits)
         sample = text[:8000]
 
-        prompt = f"""Extract structured information from the following {doc_type.value.lower()} document.
-
-Document title: {title}
-
-Document content:
-{sample}
-
-Extract the following fields:
-{schema_desc}
-
-Respond with a valid JSON object containing only the fields listed above.
-Use null for fields that cannot be determined from the document.
-For list fields, use empty arrays [] if no items are found.
-
-JSON:"""
+        prompt = (
+            f"Extract structured information from the following "
+            f"{doc_type.value.lower()} document.\n\n"
+            f"Document title: {title}\n\n"
+            f"Document content:\n{sample}\n\n"
+            f"Extract the following fields:\n{schema_desc}\n\n"
+            "Respond with a valid JSON object containing only the fields listed above. "
+            "Use null for fields that cannot be determined from the document. "
+            "For list fields, use empty arrays [] if no items are found.\n\n"
+            "JSON:"
+        )
 
         response = await client.chat.completions.create(
             model="gpt-4o-mini",
@@ -174,19 +169,18 @@ async def extract_section_structure(text: str) -> list[dict[str, Any]]:
         r"([A-Z][A-Z\s]{2,})|"  # "ALL CAPS HEADING"
         r"(#{1,4})\s+(.+)"  # Markdown headings
         r")$",
-        re.MULTILINE | re.IGNORECASE
+        re.MULTILINE | re.IGNORECASE,
     )
 
     lines = text.split("\n")
     current_section = None
-    current_start = 0
 
     for i, line in enumerate(lines):
-        line = line.strip()
-        if not line:
+        stripped_line = line.strip()
+        if not stripped_line:
             continue
 
-        match = heading_pattern.match(line)
+        match = heading_pattern.match(stripped_line)
         if match:
             # Save previous section
             if current_section:

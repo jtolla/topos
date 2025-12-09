@@ -1,7 +1,6 @@
 """Worker for semantic extraction from documents."""
 
 import logging
-from uuid import uuid4
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -38,12 +37,11 @@ class SemanticExtractionWorker(BaseWorker):
 
         # Get document text from chunks
         from sqlalchemy import select
+
         from app.models import Chunk
 
         result = await session.execute(
-            select(Chunk)
-            .where(Chunk.document_id == document.id)
-            .order_by(Chunk.chunk_index)
+            select(Chunk).where(Chunk.document_id == document.id).order_by(Chunk.chunk_index)
         )
         chunks = list(result.scalars().all())
 
@@ -54,7 +52,9 @@ class SemanticExtractionWorker(BaseWorker):
         # Reconstruct full text from chunks (de-duplicate overlapping content)
         full_text = " ".join(chunk.text for chunk in chunks)
 
-        logger.info(f"Extracting structured fields for {document.doc_type.value} document {document.id}")
+        logger.info(
+            f"Extracting structured fields for {document.doc_type.value} document {document.id}"
+        )
 
         # Extract structured fields
         structured_fields = await extract_structured_fields(

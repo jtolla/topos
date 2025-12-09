@@ -44,9 +44,7 @@ class EnrichmentWorker(BaseWorker):
 
         # Load chunks
         result = await session.execute(
-            select(Chunk)
-            .where(Chunk.document_id == document.id)
-            .order_by(Chunk.chunk_index)
+            select(Chunk).where(Chunk.document_id == document.id).order_by(Chunk.chunk_index)
         )
         chunks = list(result.scalars().all())
 
@@ -124,9 +122,7 @@ class EnrichmentWorker(BaseWorker):
         """Run sensitivity detection on chunks."""
         # Delete existing findings for this document
         await session.execute(
-            delete(SensitivityFinding).where(
-                SensitivityFinding.document_id == document_id
-            )
+            delete(SensitivityFinding).where(SensitivityFinding.document_id == document_id)
         )
 
         total_findings = 0
@@ -163,9 +159,7 @@ class EnrichmentWorker(BaseWorker):
 
         # Delete existing exposure
         await session.execute(
-            delete(DocumentExposure).where(
-                DocumentExposure.document_id == document_id
-            )
+            delete(DocumentExposure).where(DocumentExposure.document_id == document_id)
         )
 
         # Create new exposure record
@@ -179,6 +173,4 @@ class EnrichmentWorker(BaseWorker):
         )
         session.add(exposure)
 
-        logger.info(
-            f"Computed exposure: level={exposure_level.value}, score={exposure_score}"
-        )
+        logger.info(f"Computed exposure: level={exposure_level.value}, score={exposure_score}")

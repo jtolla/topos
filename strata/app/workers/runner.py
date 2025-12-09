@@ -1,7 +1,6 @@
 import asyncio
 import logging
 import signal
-import sys
 
 from app.workers.enrichment import EnrichmentWorker
 from app.workers.extraction import ExtractionWorker
@@ -21,8 +20,8 @@ async def run_workers():
     semantics_worker = SemanticExtractionWorker()
 
     # Handle shutdown signals
-    def handle_shutdown(sig, frame):
-        logger.info("Received shutdown signal")
+    def handle_shutdown(sig, frame):  # noqa: ARG001
+        logger.info(f"Received shutdown signal: {sig}")
         extraction_worker.stop()
         enrichment_worker.stop()
         semantics_worker.stop()

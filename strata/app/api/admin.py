@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.auth import generate_api_key, get_tenant_context, hash_api_key, TenantContext
+from app.auth import TenantContext, generate_api_key, get_tenant_context, hash_api_key
 from app.db import get_session
 from app.models import Agent, AgentPolicy, Estate, Policy, Share, Tenant
 from app.schemas import (
@@ -76,9 +76,7 @@ async def list_estates(
     ctx: TenantContext = Depends(get_tenant_context),
 ) -> list[EstateResponse]:
     """List all estates for the authenticated tenant."""
-    result = await ctx.session.execute(
-        select(Estate).where(Estate.tenant_id == ctx.tenant_id)
-    )
+    result = await ctx.session.execute(select(Estate).where(Estate.tenant_id == ctx.tenant_id))
     estates = result.scalars().all()
     return [
         EstateResponse(
@@ -139,9 +137,7 @@ async def list_shares(
     ctx: TenantContext = Depends(get_tenant_context),
 ) -> list[ShareResponse]:
     """List all shares for the authenticated tenant."""
-    result = await ctx.session.execute(
-        select(Share).where(Share.tenant_id == ctx.tenant_id)
-    )
+    result = await ctx.session.execute(select(Share).where(Share.tenant_id == ctx.tenant_id))
     shares = result.scalars().all()
     return [
         ShareResponse(
@@ -199,9 +195,7 @@ async def list_agents(
     ctx: TenantContext = Depends(get_tenant_context),
 ) -> list[AgentResponse]:
     """List all agents for the authenticated tenant."""
-    result = await ctx.session.execute(
-        select(Agent).where(Agent.tenant_id == ctx.tenant_id)
-    )
+    result = await ctx.session.execute(select(Agent).where(Agent.tenant_id == ctx.tenant_id))
     agents = result.scalars().all()
     return [
         AgentResponse(

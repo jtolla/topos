@@ -187,9 +187,7 @@ class File(Base):
     effective_access: Mapped[list["FileEffectiveAccess"]] = relationship(
         back_populates="file", cascade="all, delete"
     )
-    documents: Mapped[list["Document"]] = relationship(
-        back_populates="file", cascade="all, delete"
-    )
+    documents: Mapped[list["Document"]] = relationship(back_populates="file", cascade="all, delete")
 
 
 # ============================================================================
@@ -250,9 +248,7 @@ class FileAclEntry(Base):
     tenant_id: Mapped[UUID] = mapped_column(
         ForeignKey("tenant.id", ondelete="CASCADE"), nullable=False
     )
-    file_id: Mapped[UUID] = mapped_column(
-        ForeignKey("file.id", ondelete="CASCADE"), nullable=False
-    )
+    file_id: Mapped[UUID] = mapped_column(ForeignKey("file.id", ondelete="CASCADE"), nullable=False)
     principal_id: Mapped[UUID] = mapped_column(ForeignKey("principal.id"), nullable=False)
     rights: Mapped[str] = mapped_column(Text, nullable=False)  # 'R', 'RW', 'FULL'
     source: Mapped[str] = mapped_column(Text, nullable=False)  # 'FILE' | 'INHERITED'
@@ -271,9 +267,7 @@ class FileEffectiveAccess(Base):
     tenant_id: Mapped[UUID] = mapped_column(
         ForeignKey("tenant.id", ondelete="CASCADE"), nullable=False
     )
-    file_id: Mapped[UUID] = mapped_column(
-        ForeignKey("file.id", ondelete="CASCADE"), nullable=False
-    )
+    file_id: Mapped[UUID] = mapped_column(ForeignKey("file.id", ondelete="CASCADE"), nullable=False)
     principal_id: Mapped[UUID] = mapped_column(ForeignKey("principal.id"), nullable=False)
     can_read: Mapped[bool] = mapped_column(Boolean, nullable=False)
     created_at: Mapped[datetime] = mapped_column(
@@ -301,9 +295,7 @@ class Document(Base):
     tenant_id: Mapped[UUID] = mapped_column(
         ForeignKey("tenant.id", ondelete="CASCADE"), nullable=False
     )
-    file_id: Mapped[UUID] = mapped_column(
-        ForeignKey("file.id", ondelete="CASCADE"), nullable=False
-    )
+    file_id: Mapped[UUID] = mapped_column(ForeignKey("file.id", ondelete="CASCADE"), nullable=False)
     title: Mapped[str] = mapped_column(Text, nullable=False)
     file_type: Mapped[str] = mapped_column(Text, nullable=False)
     size_bytes: Mapped[int] = mapped_column(BigInteger, nullable=False)
@@ -413,9 +405,7 @@ class SensitivityFinding(Base):
     chunk_id: Mapped[UUID | None] = mapped_column(
         ForeignKey("chunk.id", ondelete="CASCADE"), nullable=True
     )
-    sensitivity_type: Mapped[SensitivityType] = mapped_column(
-        Enum(SensitivityType), nullable=False
-    )
+    sensitivity_type: Mapped[SensitivityType] = mapped_column(Enum(SensitivityType), nullable=False)
     sensitivity_level: Mapped[SensitivityLevel] = mapped_column(
         Enum(SensitivityLevel), nullable=False
     )
@@ -627,7 +617,9 @@ class Interaction(Base):
         ForeignKey("agent.id", ondelete="SET NULL"), nullable=True
     )
     user_id: Mapped[str | None] = mapped_column(Text, nullable=True)  # External user ID
-    interaction_type: Mapped[str] = mapped_column(Text, nullable=False)  # search_chunks, answer_with_evidence
+    interaction_type: Mapped[str] = mapped_column(
+        Text, nullable=False
+    )  # search_chunks, answer_with_evidence
     query: Mapped[str] = mapped_column(Text, nullable=False)
     scope = mapped_column(JSONB, nullable=True)  # Filters applied
     answer: Mapped[str | None] = mapped_column(Text, nullable=True)
@@ -663,7 +655,9 @@ class InteractionChunk(Base):
     )
     rank: Mapped[int] = mapped_column(Integer, nullable=False)
     score: Mapped[float | None] = mapped_column(nullable=True)
-    view_type: Mapped[str] = mapped_column(Text, nullable=False, default="raw")  # raw, redacted, summary
+    view_type: Mapped[str] = mapped_column(
+        Text, nullable=False, default="raw"
+    )  # raw, redacted, summary
     was_filtered: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     filter_reason: Mapped[str | None] = mapped_column(Text, nullable=True)
 

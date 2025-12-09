@@ -13,7 +13,12 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "pytest>=7.4.0",
-    "ruff>=0.1.0",
+    "ruff>=0.8.0",
+    "mypy>=1.13.0",
+    "pre-commit>=4.0.0",
+    "vulture>=2.13",
+    "bandit[toml]>=1.7.0",
+    "types-PyYAML",
 ]
 
 [project.scripts]
@@ -23,6 +28,4 @@ strata-agent = "strata_agent.main:main"
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
-[tool.ruff]
-line-length = 100
-target-version = "py311"
+# Tooling config inherited from root pyproject.toml

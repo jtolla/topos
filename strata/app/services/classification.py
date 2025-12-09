@@ -5,7 +5,6 @@ Classifies documents as CONTRACT, POLICY, RFC, or OTHER based on content analysi
 
 import logging
 import re
-from typing import Any
 
 from app.config import settings
 from app.models import DocType
@@ -73,9 +72,9 @@ def classify_document_heuristic(text: str, title: str = "") -> DocType:
 
     if contract_score == max_score:
         return DocType.CONTRACT
-    elif policy_score == max_score:
+    if policy_score == max_score:
         return DocType.POLICY
-    elif rfc_score == max_score:
+    if rfc_score == max_score:
         return DocType.RFC
 
     return DocType.OTHER
@@ -123,9 +122,8 @@ Respond with ONLY the category name (CONTRACT, POLICY, RFC, or OTHER), nothing e
 
         if result in ["CONTRACT", "POLICY", "RFC", "OTHER"]:
             return DocType(result)
-        else:
-            logger.warning(f"Unexpected classification result: {result}")
-            return DocType.OTHER
+        logger.warning(f"Unexpected classification result: {result}")
+        return DocType.OTHER
 
     except Exception as e:
         logger.exception(f"LLM classification failed: {e}")
@@ -146,5 +144,4 @@ async def classify_document(text: str, title: str = "", use_llm: bool = True) ->
     """
     if use_llm and settings.openai_api_key:
         return await classify_document_llm(text, title)
-    else:
-        return classify_document_heuristic(text, title)
+    return classify_document_heuristic(text, title)

@@ -16,9 +16,7 @@ class SensitivityMatch:
 
 
 # Email pattern
-EMAIL_PATTERN = re.compile(
-    r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b"
-)
+EMAIL_PATTERN = re.compile(r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b")
 
 # Phone number patterns (US-centric for v0)
 PHONE_PATTERNS = [
@@ -99,11 +97,7 @@ def get_snippet(text: str, start: int, end: int, context: int = 50) -> str:
     matched_text = snippet[match_start_in_snippet:match_end_in_snippet]
     redacted = "[REDACTED]" if len(matched_text) > 4 else "****"
 
-    snippet = (
-        snippet[:match_start_in_snippet]
-        + redacted
-        + snippet[match_end_in_snippet:]
-    )
+    snippet = snippet[:match_start_in_snippet] + redacted + snippet[match_end_in_snippet:]
 
     return prefix + snippet + suffix
 

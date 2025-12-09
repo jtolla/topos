@@ -12,6 +12,7 @@ This script:
 import os
 import sys
 import time
+
 import httpx
 
 API_BASE_URL = os.environ.get("API_BASE_URL", "http://api:8000")
@@ -29,7 +30,7 @@ def wait_for_api():
             if response.status_code == 200:
                 print("API is ready!")
                 return True
-        except Exception as e:
+        except Exception:
             pass
 
         print(f"  Attempt {i + 1}/{MAX_RETRIES}...")
@@ -50,8 +51,8 @@ def create_tenant(client: httpx.Client) -> dict:
             "config": {
                 "embeddings_enabled": False,
                 "classification_enabled": True,
-            }
-        }
+            },
+        },
     )
 
     if response.status_code == 409:
@@ -76,10 +77,7 @@ def create_api_key(client: httpx.Client, tenant_id: str) -> str:
 
     response = client.post(
         f"{API_BASE_URL}/api/tenants/{tenant_id}/api-keys",
-        json={
-            "name": "dev-agent-key",
-            "scopes": ["read", "write", "ingest"]
-        }
+        json={"name": "dev-agent-key", "scopes": ["read", "write", "ingest"]},
     )
 
     if response.status_code == 409:
@@ -103,10 +101,7 @@ def create_estate(client: httpx.Client, tenant_id: str, api_key: str) -> dict:
     response = client.post(
         f"{API_BASE_URL}/api/estates",
         headers=headers,
-        json={
-            "name": "dev-estate",
-            "description": "Development estate for testing"
-        }
+        json={"name": "dev-estate", "description": "Development estate for testing"},
     )
 
     if response.status_code == 409:
@@ -136,8 +131,8 @@ def create_share(client: httpx.Client, estate_id: str, api_key: str) -> dict:
         json={
             "name": "documents",
             "source_uri": "smb://samba/documents",
-            "mount_point": "/mnt/documents"
-        }
+            "mount_point": "/mnt/documents",
+        },
     )
 
     if response.status_code == 409:
@@ -176,7 +171,7 @@ def main():
         estate_id = estate["id"]
 
         # Create share
-        share = create_share(client, estate_id, api_key)
+        create_share(client, estate_id, api_key)
 
     print()
     print("=" * 60)

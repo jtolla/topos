@@ -11,7 +11,7 @@ from uuid import UUID
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.models import Agent, AgentPolicy, Chunk, DocType, Document, Policy
+from app.models import AgentPolicy, Chunk, DocType, Document, Policy
 from app.services.sensitivity import detect_sensitivity
 
 logger = logging.getLogger(__name__)
@@ -103,7 +103,7 @@ def evaluate_visibility(
     # Check doc type inclusions (if specified, only these are allowed)
     if policy.include_doc_types:
         if not doc_type or doc_type.value not in policy.include_doc_types:
-            return False, f"doc_type not in allowed list"
+            return False, "doc_type not in allowed list"
 
     # Check path exclusions
     for excluded_path in policy.exclude_paths:
@@ -144,7 +144,7 @@ def determine_view_type(policies: list[PolicyConfig]) -> str:
 
 async def evaluate_chunk_access(
     session: AsyncSession,
-    chunk: Chunk,
+    chunk: Chunk,  # noqa: ARG001
     document: Document,
     file_path: str,
     agent_id: UUID | None,
@@ -188,10 +188,9 @@ def get_chunk_text_for_view(chunk: Chunk, view_type: str) -> str:
     """Get the appropriate text representation for a chunk based on view type."""
     if view_type == "summary" and chunk.summary_text:
         return chunk.summary_text
-    elif view_type == "redacted" and chunk.redacted_text:
+    if view_type == "redacted" and chunk.redacted_text:
         return chunk.redacted_text
-    else:
-        return chunk.text
+    return chunk.text
 
 
 def generate_redacted_text(text: str, mask_pii: bool = True, mask_secrets: bool = True) -> str:
@@ -212,7 +211,11 @@ def generate_redacted_text(text: str, mask_pii: bool = True, mask_secrets: bool 
     for match in sorted_matches:
         # Determine if we should redact this match
         should_redact = False
-        if mask_pii and match.sensitivity_type.value in ["PERSONAL_DATA", "HEALTH_DATA", "FINANCIAL_DATA"]:
+        if mask_pii and match.sensitivity_type.value in [
+            "PERSONAL_DATA",
+            "HEALTH_DATA",
+            "FINANCIAL_DATA",
+        ]:
             should_redact = True
         if mask_secrets and match.sensitivity_type.value == "SECRETS":
             should_redact = True
@@ -220,11 +223,7 @@ def generate_redacted_text(text: str, mask_pii: bool = True, mask_secrets: bool 
         if should_redact:
             # Replace the sensitive content with redaction marker
             replacement = f"[{match.sensitivity_type.value}]"
-            redacted = (
-                redacted[: match.match_start]
-                + replacement
-                + redacted[match.match_end:]
-            )
+            redacted = redacted[: match.match_start] + replacement + redacted[match.match_end :]
 
     return redacted
 

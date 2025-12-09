@@ -106,9 +106,7 @@ class ExtractionWorker(BaseWorker):
                 document.doc_type = doc_type
 
                 # Delete existing chunks for re-chunking
-                await session.execute(
-                    delete(Chunk).where(Chunk.document_id == document.id)
-                )
+                await session.execute(delete(Chunk).where(Chunk.document_id == document.id))
         else:
             # Create new document (version 1)
             document = Document(

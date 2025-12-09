@@ -65,9 +65,7 @@ class Agent:
                 logger.exception(f"Error in scan cycle: {e}")
 
             if self.running:
-                logger.info(
-                    f"Sleeping for {self.settings.scan_interval_seconds} seconds"
-                )
+                logger.info(f"Sleeping for {self.settings.scan_interval_seconds} seconds")
                 await asyncio.sleep(self.settings.scan_interval_seconds)
 
     def stop(self) -> None:
@@ -87,7 +85,7 @@ async def run_continuous(settings: AgentSettings) -> None:
     agent = Agent(settings)
 
     # Handle shutdown signals
-    def handle_shutdown(sig, frame):
+    def handle_shutdown(sig, frame):  # noqa: ARG001
         logger.info(f"Received signal {sig}")
         agent.stop()
 

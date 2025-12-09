@@ -12,7 +12,7 @@ from uuid import UUID, uuid4
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.models import Chunk, Interaction, InteractionChunk
+from app.models import Interaction, InteractionChunk
 
 logger = logging.getLogger(__name__)
 

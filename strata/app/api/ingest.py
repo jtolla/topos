@@ -5,9 +5,8 @@ from uuid import uuid4
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import delete, select
-from sqlalchemy.dialects.postgresql import insert
 
-from app.auth import get_tenant_context, TenantContext
+from app.auth import TenantContext, get_tenant_context
 from app.models import (
     File,
     FileAclEntry,
@@ -67,7 +66,11 @@ async def get_or_create_principal(
     principal = result.scalar_one_or_none()
 
     if not principal:
-        ptype = PrincipalType(principal_type) if principal_type in [t.value for t in PrincipalType] else PrincipalType.USER
+        ptype = (
+            PrincipalType(principal_type)
+            if principal_type in [t.value for t in PrincipalType]
+            else PrincipalType.USER
+        )
         principal = Principal(
             id=uuid4(),
             tenant_id=ctx.tenant_id,
@@ -88,9 +91,7 @@ async def process_acl_entries(
 ) -> None:
     """Process ACL entries for a file - delete old ones and insert new."""
     # Delete existing ACL entries for this file
-    await ctx.session.execute(
-        delete(FileAclEntry).where(FileAclEntry.file_id == file.id)
-    )
+    await ctx.session.execute(delete(FileAclEntry).where(FileAclEntry.file_id == file.id))
     await ctx.session.execute(
         delete(FileEffectiveAccess).where(FileEffectiveAccess.file_id == file.id)
     )
@@ -214,14 +215,8 @@ async def process_file_event(
 
     else:
         # Existing file - check for changes
-        content_changed = (
-            event.content_hash
-            and event.content_hash != existing_file.content_hash
-        )
-        acl_changed = (
-            event.acl_hash
-            and event.acl_hash != existing_file.acl_hash
-        )
+        content_changed = event.content_hash and event.content_hash != existing_file.content_hash
+        acl_changed = event.acl_hash and event.acl_hash != existing_file.acl_hash
 
         if not content_changed and not acl_changed:
             # No changes, just update last_seen
