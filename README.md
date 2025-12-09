@@ -83,8 +83,6 @@ strata/
 ├── README.md                    # This file
 ├── CLAUDE.md                    # Claude Code guidance
 ├── docker-compose.yml           # Docker services (db, api, worker)
-├── v0.md                        # Engineering design document (v0)
-├── v0.1.md                      # Engineering design document (v0.1)
 │
 ├── backend/                     # Control plane (FastAPI)
 │   ├── pyproject.toml           # Python dependencies
@@ -132,6 +130,7 @@ strata/
 │       └── main.py              # CLI entrypoint
 │
 └── docs/                        # Design documents
+    ├── ARCHITECTURE.md          # Technical architecture (definitive)
     ├── CONCEPT.md               # Architecture concepts
     ├── USE_CASES.md             # Product use cases
     ├── POSITIONING.md           # Market positioning
