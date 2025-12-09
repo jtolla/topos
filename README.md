@@ -130,7 +130,7 @@ strata/
 │       ├── client.py            # Strata API client
 │       └── main.py              # CLI entrypoint
 │
-├── dev/                         # Development environment
+├── docker/                      # Docker environment
 │   ├── Dockerfile.init          # Init container for bootstrapping
 │   ├── init-dev.py              # Bootstrap tenant/estate/share
 │   ├── agent-config.yaml        # Agent config for Docker env
@@ -161,7 +161,7 @@ docker-compose up --build
 # 3. Creates an estate and share
 # 4. Passes the API key to the agent
 #
-# The agent then scans the sample documents in dev/samples/
+# The agent then scans the sample documents in docker/samples/
 ```
 
 Sample documents include:

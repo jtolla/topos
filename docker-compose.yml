@@ -52,7 +52,7 @@ services:
         condition: service_healthy
     volumes:
       - ./data:/data
-      - ./dev/samples:/mnt/documents:ro
+      - ./docker/samples:/mnt/documents:ro
 
   # SMB server with sample documents
   samba:
@@ -60,8 +60,8 @@ services:
     ports:
       - "445:445"
     volumes:
-      - ./dev/samba/smb.conf:/etc/samba/smb.conf:ro
-      - ./dev/samples:/shares/documents:ro
+      - ./docker/samba/smb.conf:/etc/samba/smb.conf:ro
+      - ./docker/samples:/shares/documents:ro
     command: ["-p", "-n", "-s", "documents;/shares/documents;yes;no;yes;all"]
 
   # Init service to bootstrap tenant/estate/share
@@ -88,9 +88,9 @@ services:
       init:
         condition: service_completed_successfully
     volumes:
-      - ./dev/agent-config.yaml:/config/config.yaml:ro
+      - ./docker/agent-config.yaml:/config/config.yaml:ro
       - shared_config:/config
-      - ./dev/samples:/mnt/documents:ro
+      - ./docker/samples:/mnt/documents:ro
     command: >
       sh -c '
         if [ -f /config/api-key ]; then
