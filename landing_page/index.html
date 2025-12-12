@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strata - AI-Native Data Layer for NFS/SMB</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #030712;
+            background-image:
+                radial-gradient(circle at 50% 0%, #1e3a8a22 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, #1e1b4b 0%, transparent 40%),
+                linear-gradient(to bottom, #020617, #0f172a);
+            min-height: 100vh;
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .glass-card {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.8));
+            border: 1px solid rgba(148, 163, 184, 0.1);
+        }
+
+        .cylinder-container {
+            position: relative;
+            background: linear-gradient(90deg,
+                    rgba(56, 189, 248, 0.05) 0%,
+                    rgba(56, 189, 248, 0.1) 20%,
+                    rgba(56, 189, 248, 0.05) 80%,
+                    rgba(56, 189, 248, 0.1) 100%);
+            border-top: 1px solid rgba(56, 189, 248, 0.3);
+            border-bottom: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 40px;
+            box-shadow:
+                inset 0 0 30px rgba(56, 189, 248, 0.1),
+                0 0 20px rgba(56, 189, 248, 0.1);
+        }
+
+        .flow-path {
+            stroke-dasharray: 80 80;
+            animation: flowAnimation 1.35s linear infinite;
+        }
+
+        @keyframes flowAnimation {
+            0% {
+                stroke-dashoffset: 160;
+            }
+
+            100% {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        .grid-bg {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        }
+
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(56, 189, 248, 0.3), transparent);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #60a5fa, #3b82f6);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px -10px rgba(59, 130, 246, 0.5);
+        }
+
+        .btn-secondary {
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            border-color: rgba(148, 163, 184, 0.6);
+            background: rgba(148, 163, 184, 0.1);
+        }
+
+        .feature-card {
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(56, 189, 248, 0.4);
+        }
+    </style>
+</head>
+
+<body class="flex flex-col items-center relative">
+
+    <div class="fixed inset-0 grid-bg pointer-events-none z-[-1]"></div>
+
+    <!-- Navigation -->
+    <nav class="w-full max-w-[1400px] mx-auto px-6 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold text-white">Strata</div>
+    </nav>
+
+    <main class="w-full max-w-[1400px] mx-auto z-10">
+
+        <!-- ==================== SECTION 1: HERO ==================== -->
+        <section class="px-6 py-16 lg:py-24">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="text-4xl lg:text-5xl font-semibold text-white leading-tight mb-6">
+                    Unlock Your File Shares for Safe, Auditable, More Capable AI
+                </h1>
+                <p class="text-lg lg:text-xl text-slate-400 leading-relaxed mb-10 max-w-3xl mx-auto">
+                    Strata is the AI-native data layer for NFS/SMB.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-6">
+                    <a href="#cta" class="btn-primary px-8 py-4 rounded-xl text-white font-semibold text-lg">
+                        Request a discovery call
+                    </a>
+                    <a href="#cta" class="btn-secondary px-8 py-4 rounded-xl text-slate-300 font-medium text-lg">
+                        Join the design-partner waitlist
+                    </a>
+                </div>
+                <p class="text-sm text-slate-500">
+                    Private design-partner program for teams running internal AI hubs over large file estates.
+                </p>
+            </div>
+        </section>
+
+        <div class="section-divider mx-6"></div>
+
+        <!-- ==================== SECTION 2: DIAGRAM ==================== -->
+        <section class="px-6 py-16 lg:py-24">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl lg:text-4xl font-bold text-white mb-6">
+                    How Strata Fits Between Storage and AI
+                </h2>
+                <p class="text-lg text-slate-400 max-w-3xl mx-auto">
+                    Connect a few high-value NFS/SMB shares, and Strata turns them into a semantic, policy-aware data
+                    plane that your AI hubs and agents can call.
+                </p>
+            </div>
+
+            <!-- Architecture Diagram -->
+            <div class="flex flex-col lg:flex-row items-stretch justify-center gap-0 relative">
+
+                <!-- LEFT: Enterprise File Estates -->
+                <div class="flex-1 flex flex-col items-center lg:items-end justify-center gap-8 relative z-20 py-10">
+                    <h3
+                        class="text-2xl font-bold text-white absolute top-0 right-0 w-full text-center lg:text-right lg:pr-4">
+                        Enterprise File Estates</h3>
+
+                    <div class="flex flex-col items-center lg:items-end gap-2 w-full lg:pr-8 relative">
+                        <span class="text-slate-400 text-sm font-medium mb-2">On-prem + hybrid infra</span>
+                        <div class="flex gap-4">
+                            <div class="flex flex-col items-center group">
+                                <div
+                                    class="glass-card p-4 rounded-xl w-32 h-24 flex items-center justify-center text-blue-400 mb-2 relative z-10 bg-[#0f172a]">
+                                    <i class="fa-solid fa-server text-3xl"></i>
+                                </div>
+                                <span class="text-xs text-center text-slate-300 max-w-[120px]">File Servers & NAS</span>
+                            </div>
+                            <div class="flex flex-col items-center group">
+                                <div
+                                    class="glass-card p-4 rounded-xl w-32 h-24 flex items-center justify-center text-purple-400 mb-2 relative z-10 bg-[#0f172a]">
+                                    <i class="fa-solid fa-network-wired text-3xl"></i>
+                                </div>
+                                <span class="text-xs text-center text-slate-300 max-w-[120px]">Hybrid Gateways</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col items-center lg:items-end gap-2 w-full lg:pr-8 relative">
+                        <span class="text-slate-400 text-sm font-medium mb-2">Cloud file platforms</span>
+                        <div class="flex gap-4">
+                            <div class="flex flex-col items-center">
+                                <div
+                                    class="glass-card p-3 rounded-xl w-24 h-20 flex items-center justify-center text-blue-400 mb-2 bg-[#0f172a]">
+                                    <i class="fa-solid fa-cloud text-2xl"></i>
+                                </div>
+                                <span class="text-xs text-center text-slate-300">Cloud Files</span>
+                            </div>
+                            <div class="flex flex-col items-center">
+                                <div
+                                    class="glass-card p-3 rounded-xl w-24 h-20 flex items-center justify-center text-purple-400 mb-2 bg-[#0f172a]">
+                                    <i class="fa-solid fa-database text-2xl"></i>
+                                </div>
+                                <span class="text-xs text-center text-slate-300">Object Storage</span>
+                            </div>
+                            <div class="flex flex-col items-center">
+                                <div
+                                    class="glass-card p-3 rounded-xl w-24 h-20 flex items-center justify-center text-pink-400 mb-2 bg-[#0f172a]">
+                                    <i class="fa-brands fa-google-drive text-2xl"></i>
+                                </div>
+                                <span class="text-xs text-center text-slate-300">SaaS Drives</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900/50 border border-slate-700/50 backdrop-blur-md">
+                        <i class="fa-solid fa-layer-group text-blue-400 text-sm"></i>
+                        <span class="text-slate-300 text-sm font-medium tracking-wide">Legacy Storage & Complex
+                            ACLs</span>
+                    </div>
+                </div>
+
+                <!-- CONNECTOR LEFT -->
+                <div class="hidden lg:block w-[100px] relative top-[-5rem] z-0">
+                    <svg class="absolute inset-0 w-full h-full overflow-visible" style="transform: scale(1.2);">
+                        <defs>
+                            <linearGradient id="flowGradientLeft" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.6" />
+                                <stop offset="100%" style="stop-color:#60a5fa;stop-opacity:0.8" />
+                            </linearGradient>
+                        </defs>
+                        <path d="M-20 200 C 40 200, 40 300, 120 300" fill="none" stroke="url(#flowGradientLeft)"
+                            stroke-width="2.5" class="flow-path" opacity="0.7" />
+                        <path d="M-20 400 C 40 400, 40 300, 120 300" fill="none" stroke="url(#flowGradientLeft)"
+                            stroke-width="2.5" class="flow-path" opacity="0.7" style="animation-delay: 0.5s;" />
+                    </svg>
+                </div>
+
+                <!-- CENTER: Strata Data Plane -->
+                <div
+                    class="flex-[1.5] w-full max-w-2xl px-4 py-8 relative flex flex-col items-center justify-center z-20">
+                    <h3 class="text-2xl font-bold text-white mb-6 text-center absolute top-0">Strata Data Plane</h3>
+
+                    <div class="cylinder-container relative p-8 lg:p-12 overflow-hidden backdrop-blur-sm w-full">
+                        <div class="absolute inset-0 bg-blue-500/5 blur-[100px]"></div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
+                            <div class="glass-panel p-5 rounded-2xl flex flex-col items-center text-center">
+                                <div
+                                    class="w-12 h-12 rounded-lg bg-gradient-to-br from-purple-500/20 to-purple-600/20 flex items-center justify-center mb-3 border border-purple-500/30 shadow-[0_0_15px_rgba(168,85,247,0.3)]">
+                                    <i class="fa-solid fa-file-contract text-purple-300 text-xl"></i>
+                                </div>
+                                <h4 class="font-semibold text-white text-sm mb-1">Semantic & Risk Model</h4>
+                            </div>
+
+                            <div class="glass-panel p-5 rounded-2xl flex flex-col items-center text-center">
+                                <div
+                                    class="w-12 h-12 rounded-lg bg-gradient-to-br from-blue-500/20 to-blue-600/20 flex items-center justify-center mb-3 border border-blue-500/30 shadow-[0_0_15px_rgba(59,130,246,0.3)]">
+                                    <i class="fa-solid fa-shield-halved text-blue-300 text-xl"></i>
+                                </div>
+                                <h4 class="font-semibold text-white text-sm mb-1">ACL Enforcement & Redaction</h4>
+                            </div>
+
+                            <div class="glass-panel p-5 rounded-2xl flex flex-col items-center text-center">
+                                <div
+                                    class="w-12 h-12 rounded-lg bg-gradient-to-br from-pink-500/20 to-pink-600/20 flex items-center justify-center mb-3 border border-pink-500/30 shadow-[0_0_15px_rgba(236,72,153,0.3)]">
+                                    <i class="fa-solid fa-brain text-pink-300 text-xl"></i>
+                                </div>
+                                <h4 class="font-semibold text-white text-sm mb-1">Type-Aware Chunking</h4>
+                            </div>
+
+                            <div class="glass-panel p-5 rounded-2xl flex flex-col items-center text-center">
+                                <div
+                                    class="w-12 h-12 rounded-lg bg-gradient-to-br from-emerald-500/20 to-emerald-600/20 flex items-center justify-center mb-3 border border-emerald-500/30 shadow-[0_0_15px_rgba(16,185,129,0.3)]">
+                                    <i class="fa-solid fa-crosshairs text-emerald-300 text-xl"></i>
+                                </div>
+                                <h4 class="font-semibold text-white text-sm mb-1">Observability</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CONNECTOR RIGHT -->
+                <div class="hidden lg:block w-[100px] relative top-[-5rem] z-0">
+                    <svg class="absolute inset-0 w-full h-full overflow-visible" style="transform: scale(1.2);">
+                        <defs>
+                            <linearGradient id="flowGradientRight" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#10b981;stop-opacity:0.8" />
+                                <stop offset="100%" style="stop-color:#34d399;stop-opacity:0.6" />
+                            </linearGradient>
+                        </defs>
+                        <path d="M-30 300 C 60 300, 60 200, 120 200" fill="none" stroke="url(#flowGradientRight)"
+                            stroke-width="2.5" class="flow-path" opacity="0.7" />
+                        <path d="M-30 300 C 60 300, 60 400, 120 400" fill="none" stroke="url(#flowGradientRight)"
+                            stroke-width="2.5" class="flow-path" opacity="0.7" style="animation-delay: 0.5s;" />
+                    </svg>
+                </div>
+
+                <!-- RIGHT: AI Agents & Copilots -->
+                <div
+                    class="flex-1 flex flex-col items-center lg:items-start justify-center gap-8 relative z-20 py-10 lg:pl-4">
+                    <h3
+                        class="text-2xl font-bold text-white absolute top-0 left-0 w-full text-center lg:text-left lg:pl-4">
+                        AI Agents & Copilots</h3>
+
+                    <div class="flex items-center gap-4 w-full">
+                        <div
+                            class="glass-card w-16 h-16 rounded-2xl flex items-center justify-center border-l-4 border-l-purple-400 shadow-[0_0_20px_rgba(168,85,247,0.2)] bg-[#0f172a]">
+                            <i class="fa-regular fa-comments text-purple-400 text-2xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-bold text-lg">Agentic Workflows</h4>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-4 w-full">
+                        <div
+                            class="glass-card w-16 h-16 rounded-2xl flex items-center justify-center border-l-4 border-l-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.2)] bg-[#0f172a]">
+                            <i class="fa-solid fa-robot text-emerald-400 text-2xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-bold text-lg">AI Hubs</h4>
+                            <p class="text-slate-400 text-sm">(e.g., ChatGPT Enterprise)</p>
+                        </div>
+                    </div>
+
+                    <p class="text-slate-400 text-sm leading-relaxed max-w-[280px]">
+                        Agents call Strata through ACL-aware, purpose-built tools, like
+                        <span class="text-slate-300">Search</span>,
+                        <span class="text-slate-300">Read</span>,
+                        <span class="text-slate-300">Summarize</span>, and
+                        <span class="text-slate-300">Propose Remediation</span>.
+                    </p>
+
+                    <div
+                        class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900/50 border border-slate-700/50 backdrop-blur-md">
+                        <i class="fa-solid fa-lock text-emerald-400 text-sm"></i>
+                        <span class="text-slate-300 text-sm font-medium tracking-wide">Secure, Policy-Bound Runtime
+                            Access</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Three Pillars -->
+            <div class="grid md:grid-cols-3 gap-8 mt-16 max-w-5xl mx-auto">
+                <div class="text-center">
+                    <div
+                        class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center mx-auto mb-4">
+                        <i class="fa-solid fa-shield-halved text-blue-400 text-xl"></i>
+                    </div>
+                    <h4 class="text-white font-semibold mb-2">Live ACL & Policy Enforcement</h4>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Every query is evaluated against file-system ACLs and org policies before any content is
+                        returned.
+                    </p>
+                </div>
+                <div class="text-center">
+                    <div
+                        class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center mx-auto mb-4">
+                        <i class="fa-solid fa-eye-slash text-purple-400 text-xl"></i>
+                    </div>
+                    <h4 class="text-white font-semibold mb-2">Semantic Risk & Redaction</h4>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Detects sensitive content and returns raw, redacted, or summarized views per agent and identity.
+                    </p>
+                </div>
+                <div class="text-center">
+                    <div
+                        class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mx-auto mb-4">
+                        <i class="fa-solid fa-chart-line text-emerald-400 text-xl"></i>
+                    </div>
+                    <h4 class="text-white font-semibold mb-2">Full Observability</h4>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Structured logs of which agent accessed which documents, under which policy, and why.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider mx-6"></div>
+
+        <!-- ==================== SECTION 3: WHAT YOUR AGENTS GAIN ==================== -->
+        <section class="px-6 py-16 lg:py-24">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl lg:text-4xl font-bold text-white mb-4">
+                    Make Your Existing Agents Actually Useful on File Data
+                </h2>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                <div class="glass-card p-6 rounded-2xl">
+                    <div
+                        class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-comments text-blue-400 text-xl"></i>
+                    </div>
+                    <h3 class="text-white font-semibold text-lg mb-2">Deeper answers</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        "Find the latest signed MSA with Acme and highlight what changed from the previous version."
+                    </p>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl">
+                    <div
+                        class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-diagram-project text-purple-400 text-xl"></i>
+                    </div>
+                    <h3 class="text-white font-semibold text-lg mb-2">Richer workflows</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Agents can search, read, summarize, and propose remediation over SMB/NFS using Strata's tools,
+                        not ad-hoc scripts.
+                    </p>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl">
+                    <div
+                        class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-shield-halved text-emerald-400 text-xl"></i>
+                    </div>
+                    <h3 class="text-white font-semibold text-lg mb-2">Safety by default</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Agents feel smarter because they see more of the right context—not because they've escaped your
+                        guardrails.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider mx-6"></div>
+
+        <!-- ==================== SECTION 4: WHY TEAMS USE STRATA ==================== -->
+        <section class="px-6 py-16 lg:py-24">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl lg:text-4xl font-bold text-white mb-4">
+                    Why Teams Use Strata
+                </h2>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                <div class="feature-card glass-card p-6 rounded-2xl">
+                    <div
+                        class="w-10 h-10 rounded-lg bg-blue-500/10 border border-blue-500/30 flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-key text-blue-400"></i>
+                    </div>
+                    <h3 class="text-white font-semibold mb-2">ACL-accurate retrieval</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Aligns 1:1 with live file-system ACLs and your IdP; no shadow permission model.
+                    </p>
+                </div>
+
+                <div class="feature-card glass-card p-6 rounded-2xl">
+                    <div
+                        class="w-10 h-10 rounded-lg bg-purple-500/10 border border-purple-500/30 flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-file-contract text-purple-400"></i>
+                    </div>
+                    <h3 class="text-white font-semibold mb-2">Semantic & sensitivity indexing</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Understands document types and flags PII, financials, and secrets across shares.
+                    </p>
+                </div>
+
+                <div class="feature-card glass-card p-6 rounded-2xl">
+                    <div
+                        class="w-10 h-10 rounded-lg bg-pink-500/10 border border-pink-500/30 flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-eye-slash text-pink-400"></i>
+                    </div>
+                    <h3 class="text-white font-semibold mb-2">Policy-bound runtime access</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Per-agent policies decide who gets raw text, redacted snippets, or summaries.
+                    </p>
+                </div>
+
+                <div class="feature-card glass-card p-6 rounded-2xl">
+                    <div
+                        class="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-plug text-emerald-400"></i>
+                    </div>
+                    <h3 class="text-white font-semibold mb-2">Plug-and-play with AI hubs</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Simple APIs your internal GPT, Copilot, or agent framework can call.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider mx-6"></div>
+
+        <!-- ==================== SECTION 5: WHO IT'S FOR ==================== -->
+        <section class="px-6 py-12 lg:py-16">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl lg:text-3xl font-bold text-white mb-4">
+                    Built for These Teams
+                </h2>
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-4 max-w-3xl mx-auto">
+                <div class="glass-card px-6 py-3 rounded-full flex items-center gap-3">
+                    <i class="fa-solid fa-microchip text-blue-400"></i>
+                    <span class="text-slate-300 font-medium">AI Platform & ML Infra</span>
+                </div>
+                <div class="glass-card px-6 py-3 rounded-full flex items-center gap-3">
+                    <i class="fa-solid fa-shield-halved text-pink-400"></i>
+                    <span class="text-slate-300 font-medium">Security / Risk</span>
+                </div>
+                <div class="glass-card px-6 py-3 rounded-full flex items-center gap-3">
+                    <i class="fa-solid fa-server text-emerald-400"></i>
+                    <span class="text-slate-300 font-medium">Storage & Infra</span>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider mx-6"></div>
+
+        <!-- ==================== SECTION 6: DESIGN PARTNER CTA ==================== -->
+        <section id="cta" class="px-6 py-16 lg:py-24">
+            <div class="max-w-2xl mx-auto text-center">
+                <h2 class="text-3xl lg:text-4xl font-bold text-white mb-6">
+                    Become a Design Partner
+                </h2>
+                <div class="glass-card p-8 rounded-2xl text-left mb-8">
+                    <p class="text-slate-300 mb-4 leading-relaxed">
+                        We're working with a small number of organizations that:
+                    </p>
+                    <ul class="space-y-2 text-slate-400 mb-4">
+                        <li class="flex items-start gap-3">
+                            <span class="text-slate-500">–</span>
+                            <span>Have sizable SMB/NFS/NAS estates</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-slate-500">–</span>
+                            <span>Are rolling out internal AI hubs or copilots</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-slate-500">–</span>
+                            <span>Need a safe, auditable way for agents to use file data</span>
+                        </li>
+                    </ul>
+                    <p class="text-slate-300 leading-relaxed font-medium">
+                        If that's you, let's talk.
+                    </p>
+                </div>
+
+                <a href="mailto:founder@strataplane.dev"
+                    class="btn-primary inline-block px-10 py-4 rounded-xl text-white font-semibold text-lg mb-4">
+                    Apply to the design-partner program
+                </a>
+                <p class="text-slate-500 text-sm">
+                    Or email <a href="mailto:founder@strataplane.dev"
+                        class="text-blue-400 hover:underline">founder@strataplane.dev</a>
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full border-t border-slate-800 mt-12">
+        <div class="max-w-[1400px] mx-auto px-6 py-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p class="text-slate-500 text-sm">
+                &copy; 2025 Strata. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('mousemove', (e) => {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            const x = (e.clientX - width / 2) / 150;
+            const y = (e.clientY - height / 2) / 150;
+
+            const cylinder = document.querySelector('.cylinder-container');
+            if (cylinder) {
+                cylinder.style.transform = `perspective(1000px) rotateY(${x}deg) rotateX(${-y}deg)`;
+                cylinder.style.transition = 'transform 0.15s ease-out';
+            }
+        });
+    </script>
+</body>
+
+</html>
