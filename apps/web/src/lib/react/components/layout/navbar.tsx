@@ -49,7 +49,7 @@ export function Navbar() {
           {/* Logo - Fixed width for consistent spacing */}
           <div className="flex w-[140px]">
             <Link className="flex items-center" href="/">
-              <Logo className="h-8 w-auto" />
+              <Logo className="text-3xl" />
             </Link>
           </div>
 
