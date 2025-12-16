@@ -62,10 +62,10 @@ export function Footer() {
             <h3 className="text-sm font-semibold">Contact</h3>
             <p className="text-sm text-muted-foreground">
               <a
-                href="mailto:founder@toposhq.com"
+                href="mailto:founder@usetopos.com"
                 className="hover:text-foreground transition-colors"
               >
-                founder@toposhq.com
+                founder@usetopos.com
               </a>
             </p>
           </div>

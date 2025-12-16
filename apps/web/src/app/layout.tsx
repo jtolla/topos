@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     title: 'Topos – AI-Native Data Layer for NFS/SMB',
     description:
       'Unlock your file shares for safe, auditable, more capable AI. Topos is the semantic and safety data plane for enterprise file systems.',
-    url: 'https://toposhq.com',
+    url: 'https://usetopos.com',
     siteName: 'Topos',
     images: [
       {
@@ -60,8 +60,8 @@ export const metadata: Metadata = {
     description:
       'Unlock your file shares for safe, auditable, more capable AI. Topos is the semantic and safety data plane for enterprise file systems.',
     images: ['/og-image.png'],
-    creator: '@toposhq',
-    site: '@toposhq',
+    creator: '@usetopos',
+    site: '@usetopos',
   },
   robots: {
     index: true,

@@ -10,7 +10,7 @@ export function CTASection() {
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-            Help Shape Topos
+            Help us shape Topos
           </h2>
           <p className="mt-4 text-gray-300">
             We&apos;re interviewing a small number of infra, platform, and security teams with sizable SMB/NFS/NAS estates who are exploring internal AI hubs.
@@ -28,7 +28,7 @@ export function CTASection() {
               className="h-12 px-8 bg-white text-gray-900 hover:bg-gray-100 shadow-lg hover:shadow-xl transition-all duration-300"
               asChild
             >
-              <Link href="mailto:founder@toposhq.com">
+              <Link href="mailto:founder@usetopos.com">
                 Book a discovery call
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
@@ -37,8 +37,8 @@ export function CTASection() {
 
           <p className="mt-6 text-sm text-gray-400">
             Or email{' '}
-            <a href="mailto:founder@toposhq.com" className="text-white hover:underline">
-              founder@toposhq.com
+            <a href="mailto:founder@usetopos.com" className="text-white hover:underline">
+              founder@usetopos.com
             </a>
           </p>
         </div>
