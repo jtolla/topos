@@ -22,7 +22,7 @@ export function ArchitectureSection() {
           <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
             How Topos fits between storage and AI
           </h2>
-          <p className="mt-4 text-lg text-slate-400 max-w-3xl mx-auto">
+          <p className="mt-4 text-lg text-slate-400 max-w-4xl mx-auto">
             Topos aims to turn your high-value NFS/SMB shares into a semantic,
             policy-aware data plane.
           </p>

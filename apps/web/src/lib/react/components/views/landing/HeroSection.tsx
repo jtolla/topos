@@ -30,8 +30,9 @@ export function HeroSection() {
           </div>
 
           <p className="mt-6 text-sm max-w-2xl text-gray-500 mx-auto">
-            We're currently in early development, doing 20-minute discovery calls with teams operating large file estates and building internal AI. <span className="font-semibold">No rollout required</span>.
+            We're currently in early development, doing 20-minute discovery calls with teams operating large file estates and building internal AI.
           </p>
+          <p className="mt-2 text-sm max-w-2xl text-gray-500 mx-auto font-semibold">No rollout required.</p>
         </div>
       </div>
     </section>
